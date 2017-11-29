@@ -1,8 +1,8 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+const chai = require('chai');
+const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
-import http from 'http';
-import app from '../../lib/app';
+const http = require('http');
+const app = require('../../lib/app');
 
 const server = http.createServer(app);
 const request = chai.request(server);
