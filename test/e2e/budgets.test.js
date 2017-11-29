@@ -45,7 +45,7 @@ describe('budget API', () => {
                 return request.get('/api/budget')
                     .then(({ body }) => {
                         const gotBudgets = body.sort((a, b) => a._id < b._id);
-                        savedBudgets = saveBudgets.sort((a, b) => a._id < b._id);
+                        savedBudgets = savedBudgets.sort((a, b) => a._id < b._id);
                         assert.deepEqual(savedBudgets, gotBudgets);
                     })
             })
