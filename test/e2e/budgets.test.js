@@ -7,19 +7,49 @@ const assert = chai.assert;
 describe('budget API', () => {
     beforeEach(() => mongoose.connection.dropDatabase());
     
-    const testBudget = {
-        name: 'Test Budget',
-        budget: 9999
-    };
+    const testBudgets = [
+        {
+            name: 'Test Budget 1',
+            budget: 9999
+        },
+        {
+            name: 'Test Budget 2',
+            budget: 8888
+        },
+        {
+            name: 'Test Budget 3',
+            budget: 7777
+        }
+    ];
 
     it('Should save a budget with id', () => {
         return request.post('/api/budget')
-            .send(testBudget)
+            .send(testBudgets[1])
             .then(({ body }) => {
                 const savedBudget = body;
                 assert.ok(savedBudget._id);
-                assert.equal(savedBudget.name, testBudget.name);
+                assert.equal(savedBudget.name, testBudgets[1].name);
             });
+    });
+
+    it('Should get all saved budgets', () => {
+
+        const saveBudgets = testBudgets.map( budget => {
+            return request.post('/api/budget')
+                .send(budget)
+                .then(({ body }) => body );
+        })
+
+        return Promise.all(saveBudgets)
+            .then(savedBudgets => {
+                return request.get('/api/budget')
+                    .then(({ body }) => {
+                        const gotBudgets = body.sort((a, b) => a._id < b._id);
+                        savedBudgets = saveBudgets.sort((a, b) => a._id < b._id);
+                        assert.deepEqual(savedBudgets, gotBudgets);
+                    })
+            })
+            
     })
 
 })
