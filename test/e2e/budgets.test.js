@@ -48,8 +48,23 @@ describe('budget API', () => {
                         savedBudgets = savedBudgets.sort((a, b) => a._id < b._id);
                         assert.deepEqual(savedBudgets, gotBudgets);
                     })
+            })   
+    });
+
+    it('Should delete a budget', () => {
+        return request.post('/api/budget')
+            .send(testBudgets[1])
+            .then(savedBudget => {
+                const { body } = savedBudget;
+                return request.delete(`api/budget/${body._id}`);
             })
-            
-    })
+            .then( ({ body }) => {
+                assert.deepEqual(body, { removed: true });
+                return request.get('/api/budget')
+                    .then( ({ body })=>{
+                        assert.deepEqual(body, []);
+                    })
+            });
+    });
 
 })
