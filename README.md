@@ -1,1 +1,1 @@
-# budget-server
+# Server for budget tracker app 
