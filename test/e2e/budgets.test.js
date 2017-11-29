@@ -56,6 +56,7 @@ describe('budget API', () => {
             .send(testBudgets[1])
             .then(savedBudget => {
                 const { body } = savedBudget;
+                console.log('will delete now');
                 return request.delete(`api/budget/${body._id}`);
             })
             .then( ({ body }) => {
