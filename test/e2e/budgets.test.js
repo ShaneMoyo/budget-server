@@ -57,7 +57,7 @@ describe('budget API', () => {
             .then(savedBudget => {
                 const { body } = savedBudget;
                 console.log('will delete now at id ', body._id);
-                return request.delete(`api/budget/${body._id}`);
+                return request.delete(`/api/budget/${body._id}`);
             })
             .then( ({ body }) => {
                 assert.deepEqual(body, { removed: true });
