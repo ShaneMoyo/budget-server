@@ -23,7 +23,7 @@ describe('budget API', () => {
     ];
 
     it('Should save a budget with id', () => {
-        return request.post('/api/budget')
+        return request.post('/api/budgets')
             .send(testBudgets[1])
             .then(({ body }) => {
                 const savedBudget = body;
@@ -35,14 +35,14 @@ describe('budget API', () => {
     it('Should get all saved budgets', () => {
 
         const saveBudgets = testBudgets.map( budget => {
-            return request.post('/api/budget')
+            return request.post('/api/budgets')
                 .send(budget)
                 .then(({ body }) => body );
         })
 
         return Promise.all(saveBudgets)
             .then(savedBudgets => {
-                return request.get('/api/budget')
+                return request.get('/api/budgets')
                     .then(({ body }) => {
                         const gotBudgets = body.sort((a, b) => a._id < b._id);
                         savedBudgets = savedBudgets.sort((a, b) => a._id < b._id);
@@ -52,16 +52,16 @@ describe('budget API', () => {
     });
 
     it('Should delete a budget', () => {
-        return request.post('/api/budget')
+        return request.post('/api/budgets')
             .send(testBudgets[1])
             .then(savedBudget => {
                 const { body } = savedBudget;
                 console.log('will delete now at id ', body._id);
-                return request.delete(`/api/budget/${body._id}`);
+                return request.delete(`/api/budgets/${body._id}`);
             })
             .then( ({ body }) => {
                 assert.deepEqual(body, { removed: true });
-                return request.get('/api/budget')
+                return request.get('/api/budgets')
                     .then( ({ body })=>{
                         assert.deepEqual(body, []);
                     })
@@ -71,13 +71,13 @@ describe('budget API', () => {
     it('Should update a budget by id', () => {
         const badBudget = testBudgets[1];
         let savedBudget = null; 
-        return request.post('/api/budget')
+        return request.post('/api/budgets')
             .send(badBudget)
             .then( ({ body }) => savedBudget = body)
             .then(() => {
                 badBudget.budget = 123456;
                 console.log(savedBudget);
-                return request.put(`/api/budget/${savedBudget._id}`)
+                return request.put(`/api/budgets/${savedBudget._id}`)
                     .send( badBudget );
             })
             .then( ({ body }) => assert.deepEqual(body.nModified === 1, true));
