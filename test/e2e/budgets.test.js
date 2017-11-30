@@ -68,4 +68,19 @@ describe('budget API', () => {
             });
     });
 
+    it('Should update a budget by id', () => {
+        const badBudget = testBudgets[1];
+        let savedBudget = null; 
+
+        return request.post('/api/budget')
+            .send(badBudget)
+            .then( ({ body }) => savedBudget = body)
+            .then(() => {
+                badBudget.budget = 123456;
+                return request.put(`/api/budget/${savedBudget.id}`)
+                    .send( badBudget );
+            })
+            .then( ({ body }) => assert.deepEqual(body.nModified === true));
+    })
+
 })
