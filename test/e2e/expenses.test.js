@@ -57,14 +57,37 @@ describe('Expense API', () => {
                 .then( res => res.body );
         });
 
-        return Promise.all(savedExpenses)
+        return Promise.all(saveExpenses)
             .then( savedExpenses => {
-                return request.get('api/expenses/:id')
-                    .then( gotExpeneses =>  {
-                        gotExpeneses = gotExpeneses.sort((a, b) => a._id < b._id);
+                return request.get(`/api/expenses/${savedBudget._id}`)
+                    .then( res =>  {
+                        gotExpenses = res.body.sort((a, b) => a._id < b._id);
                         savedExpenses = savedExpenses.sort((a, b) => a._id < b._id);
-                        assert.seepEqual(gotExpeneses, savedExpenses);
+                        assert.deepEqual(gotExpenses, savedExpenses);
                     });
+            })
+    })
+
+    it('should delete an expense by id', () => {
+        const saveExpenses = testExpenses.map( expense => {
+            return request.post('/api/expenses')
+                .send(expense)
+                .then( res => res.body );
+        });
+
+        return Promise.all(saveExpenses)
+            .then(savedExpenses => {
+                return request.delete(`/api/expenses/${savedExpenses[0]._id}`)
+                    .then( ({ body }) => {
+                        assert.deepEqual(body, { removed: true });
+                        return request.get(`/api/expenses/${savedBudget._id}`)
+                            .then(gotExpenses => {
+                                const checkExpenses = [savedExpenses[1], savedExpenses[2]];
+                                gotExpenses = gotExpenses.sort((a, b) => a._id < b._id);
+                                checkExpenses.sort((a, b) => a._id < b._id);
+                                assert.deepEqual(gotExpenses, checkExpenses);
+                            });
+                    })
             })
     })
 
