@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const request = require('./request');
 const assert = chai.assert;
 
+
 describe('Expense API', () => {
-
+    
     beforeEach(()=> mongoose.connection.dropDatabase());
-
-    let savedBudget; 
+     
+    let savedBudget;
 
     beforeEach(()=>{
         const testBudget = {
@@ -17,7 +18,7 @@ describe('Expense API', () => {
         return request.post('/api/budgets')
             .send(testBudget)
             .then(({ body })=> {
-                const savedBudget = body;
+                savedBudget = body;
             });
     })
 
@@ -27,6 +28,7 @@ describe('Expense API', () => {
             amount: 20,
             budget: savedBudget._id
         }
+
         return request.post('/api/expenses')
             .send(testExpense)
             .then(({ body })=> {
@@ -34,7 +36,7 @@ describe('Expense API', () => {
                 assert.ok(savedExpense._id);
                 assert.equal(savedExpense.name, testExpense.name)
             });
-    })
+    });
 
 
 })
