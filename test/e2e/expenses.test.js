@@ -81,9 +81,9 @@ describe('Expense API', () => {
                     .then( ({ body }) => {
                         assert.deepEqual(body, { removed: true });
                         return request.get(`/api/expenses/${savedBudget._id}`)
-                            .then(gotExpenses => {
+                            .then(res => {
                                 const checkExpenses = [savedExpenses[1], savedExpenses[2]];
-                                gotExpenses = gotExpenses.sort((a, b) => a._id < b._id);
+                                gotExpenses = res.body.sort((a, b) => a._id < b._id);
                                 checkExpenses.sort((a, b) => a._id < b._id);
                                 assert.deepEqual(gotExpenses, checkExpenses);
                             });
