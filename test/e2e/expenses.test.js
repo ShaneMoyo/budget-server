@@ -91,5 +91,20 @@ describe('Expense API', () => {
             })
     })
 
+    it('Should update a budget by id', () => {
+        const badExpense = testExpenses[1];
+        let savedExpense = null; 
+        return request.post('/api/expenses')
+            .send(badExpense)
+            .then( ({ body }) => savedExpense = body)
+            .then(()=> {
+                badExpense.amount = 666;
+                console.log('new expense with new amount', badExpense)
+                    return request.put(`/api/budgets/${savedExpense._id}`)
+                        .send( badExpense );
+                })
+                .then( ({ body }) => assert.deepEqual(body.nModified === 1, true));
+    });
+    
 
 })
