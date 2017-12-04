@@ -100,7 +100,7 @@ describe('Expense API', () => {
             .then(()=> {
                 badExpense.amount = 666;
                 console.log('new expense with new amount', badExpense)
-                    return request.put(`/api/budgets/${savedExpense._id}`)
+                    return request.put(`/api/expenses/${savedExpense._id}`)
                         .send( badExpense );
                 })
                 .then( ({ body }) => assert.deepEqual(body.nModified === 1, true));
