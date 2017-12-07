@@ -59,10 +59,13 @@ describe('Expense API', () => {
 
         return Promise.all(saveExpenses)
             .then( savedExpenses => {
-                return request.get(`/api/expenses/${savedBudget._id}`)
+                console.log('saved expense budget id', savedExpenses)
+                console.log('requesting on path ', `/api/expenses/${savedExpenses[0].budget}` )
+                return request.get(`/api/expenses/${savedExpenses[0].budget}`)
                     .then( res =>  {
                         gotExpenses = res.body.sort((a, b) => a._id < b._id);
                         savedExpenses = savedExpenses.sort((a, b) => a._id < b._id);
+                        console.log('got expense ====================', gotExpenses);
                         assert.deepEqual(gotExpenses, savedExpenses);
                     });
             })
