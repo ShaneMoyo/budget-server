@@ -56,7 +56,6 @@ describe('budget API', () => {
             .send(testBudgets[1])
             .then(savedBudget => {
                 const { body } = savedBudget;
-                console.log('will delete now at id ', body._id);
                 return request.delete(`/api/budgets/${body._id}`);
             })
             .then( ({ body }) => {
@@ -76,7 +75,6 @@ describe('budget API', () => {
             .then( ({ body }) => savedBudget = body)
             .then(() => {
                 badBudget.budget = 123456;
-                console.log(savedBudget);
                 return request.put(`/api/budgets/${savedBudget._id}`)
                     .send( badBudget );
             })

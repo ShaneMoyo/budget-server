@@ -59,13 +59,10 @@ describe('Expense API', () => {
 
         return Promise.all(saveExpenses)
             .then( savedExpenses => {
-                console.log('saved expense budget id', savedExpenses)
-                console.log('requesting on path ', `/api/expenses/${savedExpenses[0].budget}` )
                 return request.get(`/api/expenses/${savedExpenses[0].budget}`)
                     .then( res =>  {
                         gotExpenses = res.body.sort((a, b) => a._id < b._id);
                         savedExpenses = savedExpenses.sort((a, b) => a._id < b._id);
-                        console.log('got expense ====================', gotExpenses);
                         assert.deepEqual(gotExpenses, savedExpenses);
                     });
             })
@@ -102,7 +99,6 @@ describe('Expense API', () => {
             .then( ({ body }) => savedExpense = body)
             .then(()=> {
                 badExpense.amount = 666;
-                console.log('new expense with new amount', badExpense)
                     return request.put(`/api/expenses/${savedExpense._id}`)
                         .send( badExpense );
                 })
