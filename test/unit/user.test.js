@@ -13,4 +13,9 @@ describe('user model', () => {
         assert.isOk(testUser.hash);
         assert.notEqual(testUser.hash, password);
     });
+
+    it('compares password', () => {
+        assert.isTrue(testUser.comparePassword('XYZ'));
+        assert.isFalse(testUser.comparePassword('ABC'));
+    });
 })
